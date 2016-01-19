@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
 <head>
-  <title>Context Menu</title>
+  <title>nwjs test</title>
 </head>
 <body style="width: 100%; height: 100%;">
 
@@ -21,7 +21,13 @@ var menuItem1 = new nw.MenuItem({
 });
 var menuItem2 = new nw.MenuItem({ label: 'Open' });
 var menuItem3 = new nw.MenuItem({ type: 'separator' });
-var menuItem4 = new nw.MenuItem({ label: 'Exit' });
+var menuItem4 = new nw.MenuItem({ 
+	label: 'Exit',
+	click: function(){
+		var c = confirm('Are you sure that you want to exit the application?');
+		if (c) nw.App.closeAllWindows();
+	}
+});
 
 // Add some items with label
 trayMenu.append(menuItem1);
