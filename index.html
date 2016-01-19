@@ -5,34 +5,43 @@
 </head>
 <body style="width: 100%; height: 100%;">
 
-<p>'Right click' to show context menu.</p>
-
 <script>
 // Create an empty context menu
 var nw = require('nw.gui');
 var os = require('os');
-var menu = new nw.Menu();
+var trayMenu = new nw.Menu();
+var menuBar = new nw.Menu({type: 'menubar'});
+
+var menuItem1 = new nw.MenuItem({
+  label: 'New',
+  click: function(){
+    alert('You have clicked at "New"');
+  },
+  icon: "tray.png"
+});
+var menuItem2 = new nw.MenuItem({ label: 'Open' });
+var menuItem3 = new nw.MenuItem({ type: 'separator' });
+var menuItem4 = new nw.MenuItem({ label: 'Exit' });
 
 // Add some items with label
-menu.append(new nw.MenuItem({
-  label: 'Item A',
-  click: function(){
-    alert('You have clicked at "Item A"');
-  }
+trayMenu.append(menuItem1);
+trayMenu.append(menuItem2);
+trayMenu.append(menuItem3);
+trayMenu.append(menuItem4);
+
+var tray = new nw.Tray({
+	title: 'Tray', 
+	tooltip: 'Tray',
+	icon: 'tray.png',
+	menu: trayMenu
+});
+
+menuBar.append(new nw.MenuItem({
+	label: 'File',
+	submenu: trayMenu
 }));
-menu.append(new nw.MenuItem({ label: 'Item B' }));
-menu.append(new nw.MenuItem({ type: 'separator' }));
-menu.append(new nw.MenuItem({ label: 'Item C' }));
 
-// Hooks the "contextmenu" event
-document.body.addEventListener('contextmenu', function(ev) {
-  // Prevent showing default context menu
-  ev.preventDefault();
-  // Popup the native context menu at place you click
-  menu.popup(ev.x, ev.y);
-
-  return false;
-}, false);
+nw.Window.get().menu = menuBar;
 
 document.write('You are running on ', os.platform());
 
