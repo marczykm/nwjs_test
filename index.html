@@ -6,7 +6,6 @@
 <body style="width: 100%; height: 100%;">
 
 <script>
-// Create an empty context menu
 var nw = require('nw.gui');
 var os = require('os');
 var trayMenu = new nw.Menu();
@@ -19,13 +18,17 @@ var menuItem1 = new nw.MenuItem({
   },
   icon: "tray.png"
 });
-var menuItem2 = new nw.MenuItem({ label: 'Open' });
+var menuItem2 = new nw.MenuItem({ 
+	label: 'Open',
+	click: function(){
+		nw.Shell.openExternal('http://www.google.com');
+	}
+});
 var menuItem3 = new nw.MenuItem({ type: 'separator' });
 var menuItem4 = new nw.MenuItem({ 
 	label: 'Exit',
 	click: function(){
-		var c = confirm('Are you sure that you want to exit the application?');
-		if (c) nw.App.closeAllWindows();
+		nw.App.closeAllWindows();
 	}
 });
 
@@ -49,8 +52,14 @@ menuBar.append(new nw.MenuItem({
 
 nw.Window.get().menu = menuBar;
 
-document.write('You are running on ', os.platform());
+var exitShortcut = new nw.Shortcut({
+	key: 'Ctrl+Q',
+	active: function(){
+		nw.App.closeAllWindows();
+	}
+});
+nw.App.registerGlobalHotKey(exitShortcut);
 
-</script>  
+</script>
 </body>
 </html>
